@@ -15,82 +15,6 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     redirect_to :action => :show , :number => @order.number
   end
 
-  def export
-    unless session[:items]
-      show
-      return
-    end
-    missing = []
-    session[:items].each do |key , item | 
-      missing << item.variant.full_name if item.variant.ean.blank?
-    end
-    unless missing.empty?
-      flash[:error] = "All items must have ean set, missing: #{missing.join(' , ')}"
-      redirect_to :action => :show 
-      return
-    end
-    opt = {}
-    session[:items].each do |key , item | 
-      var = item.variant
-      opt[var.ean] = item.quantity
-      var.on_hand =  var.on_hand - item.quantity
-      var.save!
-    end
-    init  # reset this pos
-    opt[:host] = "" #Spree::Config[:pos_export] 
-    opt[:controller] = "pos" 
-    opt[:action] = "import" 
-    redirect_to opt
-  end
-  
-  def import
-    init
-    added = 0
-    params.each do |id , quant |
-      next if id == "action" 
-      next if id == "controller" 
-      v = Spree::Variant.find_by_ean id
-      if v 
-        add_variant(v , quant )
-        added += 1
-      else
-        v = Spree::Variant.find_by_sku id
-        if v 
-          add_variant(v , quant )
-          added += 1
-        else
-          add_error "No product found for EAN #{id}     "
-        end
-      end
-    end
-    add_notice "Added #{added} products" if added
-    redirect_to :action => :show
-  end
-  
-  def inventory
-    if @order.state == "complete"
-      flash[:error] = "Order was already completed (printed), please start with a new customer to add inventory"     
-      redirect_to :action => :show 
-      return
-    end
-    as = params[:as]
-    num = 0 
-    prods = @order.line_items.count
-    @order.line_items.each do |item |
-      variant = item.variant
-      num += item.quantity
-      if as
-        variant.on_hand = item.quantity
-      else
-        variant.on_hand += item.quantity
-      end
-      variant.save!
-    end
-    @order.line_items.clear
-    flash.notice = "Total of #{num} items #{as ? 'inventoried': 'added'} for #{prods} products "     
-    redirect_to :action => :show 
-  end
-  
   def add
     if pid = params[:item]
       add_variant Spree::Variant.find pid
@@ -130,6 +54,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     @order.completed_at = Time.now
     @order.create_tax_charge!
     @order.finalize!
+    @order.shipments.map { |s| s.ship! }
     @order.save!
     url = SpreePos::Config[:pos_printing]
     url = url.sub("number" , @order.number.to_s)
@@ -141,6 +66,8 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
   end
   
   def show
+
+    # Here you can change the price manually
     if params[:price] && request.post?
       pid = params[:price].to_i
       item = @order.line_items.find { |line_item| line_item.id == pid }
@@ -149,6 +76,8 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
       @order.reload # must be something cached in there, because it doesnt work without. shame.
       flash.notice = I18n.t("price_changed")
     end
+
+    # Change the number of items
     if params[:quantity_id] && request.post?
       iid = params[:quantity_id].to_i
       item = @order.line_items.find { |line_item| line_item.id == iid }
@@ -158,8 +87,11 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
       #TODO Hack to get the inventory to update. There must be a better way, but i'm lost in spree jungle
       item.variant.product.save
       @order.reload # must be something cached in there, because it doesnt work without. shame.
-      flash.notice = I18n.t("quantity_changed")      
+      flash.notice = I18n.t("quantity_changed") if item.valid?
+      add_error I18n.t("no_enough_stock") unless item.sufficient_stock?
     end
+
+    # Adding a discount
     if discount = params[:discount]
       if i_id = params[:item]
         item = @order.line_items.find { |line_item| line_item.id.to_s == i_id }
@@ -169,8 +101,10 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
           item_discount( item , discount )
         end
       end
+
       @order.reload # must be something cached in there, because it doesnt work without. shame.
     end
+
     if sku = params[:sku]
       prods = Spree::Variant.where(:sku => sku ).limit(2)
       if prods.length == 0 and Spree::Variant.instance_methods.include? "ean"
@@ -183,6 +117,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
         return
       end
     end
+
   end
   
   def item_discount item , discount
@@ -200,38 +135,53 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     end
   end
     
-  private
+  protected
   
   def add_notice no
     flash[:notice] = "" unless flash[:notice]
     flash[:notice] << no
   end
+
   def add_error no
     flash[:error] = "" unless flash[:error]
     flash[:error] << no
   end
   
   def init
-    @order = Spree::Order.new 
-    @order.user = current_user
-    @order.bill_address = @order.user.bill_address
-    @order.ship_address = @order.user.ship_address
-    @order.email = current_user.email
+    @order = Spree::Order.new
+    @order.associate_user!(spree_current_user)
+    @order.ship_address = spree_current_user.ship_address
+    @order.bill_address = spree_current_user.bill_address
     @order.save!
-    method = Spree::ShippingMethod.find_by_name SpreePos::Config[:pos_shipping]
-    @order.shipping_method = method || Spree::ShippingMethod.first
-    @order.create_shipment!
+    #method = Spree::ShippingMethod.find_by_name SpreePos::Config[:pos_shipping]
+    #@order.shipping_method = method || Spree::ShippingMethod.first
+    #@order.create_proposed_shipments
     session[:pos_order] = @order.number
   end
+
   def add_variant var , quant = 1
-    init unless @order 
-    @order.add_variant(var , quant)
-    #TODO Hack to get the inventory to update. There must be a better way, but i'm lost in spree jungle
-    var.product.save
+    init unless @order
+
+    # Using the same populator as OrderContoller#populate
+    populator = Spree::OrderPopulator.new(@order, Spree::Config[:currency])
+    populator.populate(variants: { var => quant})
+
+    self.set_shipping_method
+    @order.save!
   end
 
-  private
-  
+  def set_shipping_method
+    # Calculate the shipments
+    # TODO: Check stock location for be in the shop
+    @order.create_proposed_shipments
+
+    # Set shipping method as one named 'At Store'
+    method = Spree::ShippingMethod.find_by_name 'At Store'
+    @order.shipments.map { |s| sm = s.shipping_rates.find_by_shipping_method_id(method.id); s
+    .selected_shipping_rate_id= sm.id }
+
+  end
+
   def init_search
     params[:q] ||= {}
     params[:q][:meta_sort] ||= "product_name asc"
@@ -240,5 +190,6 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     @search = Spree::Variant.ransack(params[:q])
     @variants = @search.result(:distinct => true).page(params[:page]).per(20)
   end
+
 end
 
