@@ -38,23 +38,13 @@
   <a href="javascript:poptastic('/admin/pos/print/<%=@order.number%>');" alt="Print"/>
       <%= image_tag "admin/pos/print.png" %>
   </a>
-  <a href="/admin/orders/<%=@order.number%>">
+  <a href="/admin/orders/<%=@order.number%>/edit">
     <%= image_tag "admin/pos/order.jpg" , :alt => "View order" %> 
   </a>  
   <a href="/admin/pos/new?force=true" onclick="javascript:if (newwindow) newwindow.close()">
     <%= image_tag "admin/pos/customer.png" , :alt => "New Customer" %> 
   </a>  <br/>
   <%= image_tag "admin/pos/barcode.jpg" , :alt => "Trenner" , :width => 280 , :height => 15 %>  <br/>
-  <a href="/admin/pos/export" target="_blank">
-    <%  image_tag("admin/pos/export.jpg" )   #if Spree::Config[:pos_export]
-    %> 
-  </a>  
-  <a href="/admin/pos/inventory/<%=@order.number%>">      
-    <%= image_tag "admin/pos/inventory_plus.png" , :alt => "Add Inventory" , :width => 80 , :height => 80 %>  <br/>
-  </a>  
-  <a href="/admin/pos/inventory/<%=@order.number%>?as=true">
-    <%= image_tag "admin/pos/inventory.png" , :alt => "As Inventory" , :width => 80 , :height => 80 %>  <br/>
-  </a>  
 <%end%>
 <%= render 'spree/shared/error_messages', :target => @pos %>
 <table class="index">
