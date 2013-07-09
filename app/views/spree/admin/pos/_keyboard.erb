@@ -1,0 +1,32 @@
+<div>
+  <script>
+    $(function(){
+      $('#given').on('keyup',function(){
+        value = $(this).val();
+        total = <%= @order.total %>;
+        $('#return-money').html(value - total)
+      })
+
+      $('.keyboard button').on('click',function(){
+        given = $('#given')
+        given.val(given.val() + $(this).attr('data-number'))
+        given.trigger('keyup')
+      })
+      $('#delete').on('click',function(){
+        $('#given').val()
+      })
+    });
+  </script>
+  <input id="given" type="number">
+  <div class="keyboard">
+    <% 10.times.each do |i| %>
+      <button data-number="<%= i %>">
+        <%= i %>
+      </button>
+    <% end %>
+    <button id="delete">BORRAR</button>
+  </div>
+  <div id="return-money">
+
+  </div>
+</div>
