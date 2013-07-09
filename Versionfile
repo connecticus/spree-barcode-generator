@@ -5,7 +5,8 @@
 # note: the 1.0 version was in never in production use as I had server crashes with 1.0 and upgraded immediately to 1.1
 "1.0.x" => { :ref => "7075b1b483faa183679761f060072515e45dcaf7"}
 
-"1.1.x" => { :branch => "master" }
+"1.1.x" => { :ref => "ccb4209c94a326f1760bef0b8a7fd32a3f4be121" }
+"2.0.x" => { :branch => "master" }
 
 
 
