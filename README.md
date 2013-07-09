@@ -1,7 +1,7 @@
 Update
 ========
 
-Notice of demolition: this rep WILL be removed. Go fork, even register your fork on spreecommerce, but don't sent pushes.
+Doing re-work for update to last version of spree 2.0
 
 SpreePos
 ===============
