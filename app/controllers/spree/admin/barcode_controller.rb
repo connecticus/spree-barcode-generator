@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'barby'
 require 'prawn'
 require 'prawn/measurement_extensions'
@@ -14,8 +15,8 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
     name = @variant.name
     name += " #{@variant.option_values.first.presentation}" if @variant.option_values.first
     pdf.text( name )
-    price = @variant.price 
-    pdf.text( "#{price} €"  , :align => :right )
+    price = @variant.price
+    pdf.text "#{price} €", align: :right
     if barcode = get_barcode
       pdf.image( StringIO.new( barcode.to_png(:xdim => 5)) , :width => 50.mm , 
             :height => 10.mm , :at => [ 0 , 10.mm])
