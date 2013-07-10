@@ -33,17 +33,18 @@ locations.
 Dependencies
 ============
 
-NOTICE: WORKING IN THIS FOR MAKE IT WORKS
-
 spree_html_invoice ..... but
 
 The dependency is not made explicit in case you don't need receipt (see configure section).
 
-By default POS relies on html-invoice to print a receipt. You can configure this away by setting :pos_printing to the url where you want to redirect after print. By default it is "/admin/invoice/number/receipt" which relies on spree-html-invoice to be installed. To remove this dependency you could redirect to the order show like so
+By default POS relies on html-invoice to print a receipt. You can configure this away by setting :pos_printing to the
+ url where you want to redirect after print. By default it is "/admin/invoice/number/receipt" which relies on
+ spree-html-invoice to be installed. To remove this dependency you could redirect to the order show like so
 
 SpreePos::Config.set(:pos_printing => "admin/orders/number") #and number gets substituted with the order number
 
-You can install spree-product-barcodes to print product labels if need be. Otherwise use the existing upc barcodes on the products and scan them into the sku.
+You can install spree-product-barcodes to print product labels if need be. Otherwise use the existing upc barcodes on
+ the products and scan them into the sku.
 
 
 Configure
@@ -54,18 +55,17 @@ taken, rarely what you want.
 
 SpreePos::Config.set(:pos_shipping => "MethodName") #Usually something like "pickup" with cost 0
 
-POS uses the first Spree::PaymentMethod::Check in the current environment for payment. So this is actually not configurable, but the PaymentMethod has to be configured for POS to work
+POS uses the first Spree::PaymentMethod::Check in the current environment for payment. So this is actually not
+configurable, but the PaymentMethod has to be configured for POS to work
 
 If you don't change the :pos_printing  config as described above, you must add 
 
-gem 'spree_html_invoice' , :git => 'git://github.com/dancinglightning/spree-html-invoice.git'
+gem 'spree_html_invoice' , :git => 'git://github.com/CodeCantor/spree-html-invoice.git'
 
 to your gemfile. If you do, you _will_ want to configure the look of the receipt
 
 EAN
 ====
-
-NOTICE: Not tested in the last version of spree
 
 Many sales and especially POS systems rely on barcode scanning. A barcode scanner functions identical to keyboard
 input  to the product code. You may use the sku field for this but we use that for the suppliers code (or our own).
@@ -79,7 +79,9 @@ Add to your Gemfile with
 
   gem "spree_pos", :git => "git://github.com/CodeCantor/spree-pos.git"
 
-and run bundler. (read about the dependencies if you haven't yet)
+run bundler. (read about the dependencies if you haven't yet) and finally run:
+
+  rails generator spree_pos:install
 
 
 Copyright (c) 2011 [Torsten Ruger], released under the New BSD License
