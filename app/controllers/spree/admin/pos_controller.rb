@@ -51,6 +51,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
       payment.capture!
     end
     @order.state = "complete"
+    @order.pos_sell = true
     @order.completed_at = Time.now
     @order.create_tax_charge!
     @order.finalize!
