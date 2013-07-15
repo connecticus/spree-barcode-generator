@@ -1,10 +1,6 @@
-Update
-========
-
-Doing re-work for update to last version of spree 2.0
-
-SpreePos
-===============
+**DOING SOME REWORK FOR ADAPT THIS GEM TO SPREE 2.0-STABLE AND REFACTORING SOME CODE. NOT STABLE** 
+SUMMARY
+-------
 
 A Point Of Sale (POS) screen for Spree.
 
@@ -16,72 +12,53 @@ A minimal transaction is one scan, and pressing of print button.
 
 Basic bar scanner input (sku/ean search) or search by name. No Customer, no shipping, no coupons, but these are achievable through the order interface.
 
-POS creates orders (just like the admin/order) and in fact lets you switch between the two views freely by adding
-links back and forth.
+POS creates orders (just like the admin/order) and in fact lets you switch between the two views freely by adding links back and forth.
 
 Pressing new customer will create a new order (in checkout), which is finalised when print is pressed.
 
 ONLY pressing print will finalise the order, if you do not press print (ie press new customer) the order will be left
  in "checkout" state and thus not be a sale in your system.
 
-Inventory
-=========
+Installation
+------------
 
-This feature has been deprecated because it is no longer anymore. Have to first refactor the code and use stock
-locations.
+The best way for use this software is to put this code in the Gemfile: 
 
-Dependencies
-============
+```shell
+gem "spree_pos", :git => "git://github.com/CodeCantor/spree-pos.git"
+gem "spree_html_invoice", :git => "git://github.com/CodeCantor/spree-html-invoice.git"
+```
 
-spree_html_invoice ..... but
+For install the assets neaded and create the default objects run the follow command:
 
-The dependency is not made explicit in case you don't need receipt (see configure section).
+```shell
+rails generator spree_pos:install
+```
 
-By default POS relies on html-invoice to print a receipt. You can configure this away by setting :pos_printing to the
- url where you want to redirect after print. By default it is "/admin/invoice/number/receipt" which relies on
- spree-html-invoice to be installed. To remove this dependency you could redirect to the order show like so
+Continue reading the configuration section for see how to finish the setup.
 
-SpreePos::Config.set(:pos_printing => "admin/orders/number") #and number gets substituted with the order number
+qonfigure
+--------
+By default, the address chosen by the pos, will be the one setted to the current user logged. You can config this address changing this options:
 
-You can install spree-product-barcodes to print product labels if need be. Otherwise use the existing upc barcodes on
- the products and scan them into the sku.
+  * Ship Address: You can config this options setting :pos_ship_address to the id of the Spree::Address you would like to use.
+  * Bill Address: You can config this options setting :pos_bill_address to the id of the Spree::Address you would like to use. By default it will use :ship_address if not set
 
+If you would like to use an other shipping method you can change it using, :pos_shipping_method.
 
-Configure
-=========
+You can also change the invoice generator change the url, in wich the pos will redirect after press in print invoice:
 
-An Order must be shipped, so you must configure a ShippingMethod to be used. If you don't the first will be
-taken, rarely what you want.
+  * Pos printing: Change the option :pos_printing to the url you would like to use after pressing print.
 
-SpreePos::Config.set(:pos_shipping => "MethodName") #Usually something like "pickup" with cost 0
+If you change this option, the spree_html_invoice gem is not longer required.
 
-POS uses the first Spree::PaymentMethod::Check in the current environment for payment. So this is actually not
-configurable, but the PaymentMethod has to be configured for POS to work
-
-If you don't change the :pos_printing  config as described above, you must add 
-
-gem 'spree_html_invoice' , :git => 'git://github.com/CodeCantor/spree-html-invoice.git'
-
-to your gemfile. If you do, you _will_ want to configure the look of the receipt
-
-EAN
-====
+What is the EAN?
+---------------
 
 Many sales and especially POS systems rely on barcode scanning. A barcode scanner functions identical to keyboard
 input  to the product code. You may use the sku field for this but we use that for the suppliers code (or our own).
 
 So there is a migration supplied that provides a ean (European Article code, may be upc too) for the Variant class, and fields to edit it and search by it.
 
-Installation
-=======
-
-Add to your Gemfile with 
-
-  gem "spree_pos", :git => "git://github.com/CodeCantor/spree-pos.git"
-
-run bundler. (read about the dependencies if you haven't yet) and finally run:
-
-  rails generator spree_pos:install
-
-
 Copyright (c) 2011 [Torsten Ruger], released under the New BSD License
+Copyright (c) 2013 [Enrique Alvarez (enrique at codecantor dot com)], released under the New BSD License
