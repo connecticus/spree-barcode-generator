@@ -3,13 +3,24 @@ module SpreePos
     class InstallGenerator < Rails::Generators::Base
 
       def add_javascripts
-        append_file "app/assets/javascripts/store/all.js", "//= require store/spree_pos\n"
-        append_file "app/assets/javascripts/admin/all.js", "//= require admin/spree_pos\n"
+        #append_file "app/assets/javascripts/store/all.js", "//= require store/spree_pos\n"
+        #append_file "app/assets/javascripts/admin/all.js", "//= require admin/spree_pos\n"
       end
 
       def add_stylesheets
-        inject_into_file "app/assets/stylesheets/store/all.css", " *= require store/spree_pos\n", :before => /\*\//, :verbose => true
-        inject_into_file "app/assets/stylesheets/admin/all.css", " *= require admin/spree_pos\n", :before => /\*\//, :verbose => true
+        #inject_into_file "app/assets/stylesheets/store/all.css", " *= require store/spree_pos\n", :before => /\*\//, :verbose => true
+        #inject_into_file "app/assets/stylesheets/admin/all.css", " *= require admin/spree_pos\n", :before => /\*\//, :verbose => true
+      end
+
+      def add_shipping_method
+        sm = Spree::ShippingMethod.new({
+          name: 'At Store2',
+          display_on: 'back_end',
+          tracking_url: '',
+        })
+        sm.shipping_categories << Spree::ShippingCategory.find(2)
+        sm.calculator = Spree::Calculator::Shipping::FlatRate.new()
+        sm.save!
       end
 
       def add_migrations

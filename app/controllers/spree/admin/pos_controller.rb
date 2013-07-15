@@ -152,9 +152,9 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     @order = Spree::Order.new
     @order.associate_user!(spree_current_user)
 
-    if Spree::Config.pos_ship_address
-      ship_address = Spree::Address.find Spree::Config.pos_ship_address
-      bill_address = Spree::Addess.find(Spree::Config.pos_bill_address) || bill_address
+    if SpreePos::Config[:pos_ship_address]
+      ship_address = Spree::Address.find SpreePos::Config[:pos_ship_address]
+      bill_address = Spree::Addess.find(SpreePos::Config[:pos_bill_address]) || bill_address
     elsif spree_current_user.ship_address
       ship_address = spree_current_user.ship_address
       bill_address = spree_current_user.bill_address || ship_address
@@ -187,7 +187,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     @order.create_proposed_shipments
 
     # Set shipping method as one named 'At Store'
-    name_shipping = Spree::Config.pos_shipping_method || 'At Store'
+    name_shipping = SpreePos::Config[:pos_shipping_method] || 'At Store'
     method = Spree::ShippingMethod.find_by_name name_shipping
     @order.shipments.map do |s| 
       sm = s.shipping_rates.find_by_shipping_method_id(method.id) 

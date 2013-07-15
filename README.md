@@ -39,6 +39,8 @@ Continue reading the configuration section for see how to finish the setup.
 
 qonfigure
 --------
+**IMPORTANT**: You have to config the shipping method with the zone of the ship address in the pos.
+
 By default, the address chosen by the pos, will be the one setted to the current user logged. You can config this address changing this options:
 
   * Ship Address: You can config this options setting :pos_ship_address to the id of the Spree::Address you would like to use.
