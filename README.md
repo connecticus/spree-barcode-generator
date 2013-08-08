@@ -1,4 +1,4 @@
-**DOING SOME REWORK FOR ADAPT THIS GEM TO SPREE 2.0-STABLE AND REFACTORING SOME CODE. NOT STABLE** 
+**DOING SOME REWORK FOR ADAPT THIS GEM TO SPREE 2.0-STABLE AND REFACTORING SOME CODE. NOT STABLE**
 SUMMARY
 -------
 
@@ -22,14 +22,14 @@ ONLY pressing print will finalise the order, if you do not press print (ie press
 Installation
 ------------
 
-The best way for use this software is to put this code in the Gemfile: 
+The best way for using this software is by adding this code to your Gemfile:
 
 ```shell
 gem "spree_pos", :git => "git://github.com/CodeCantor/spree-pos.git"
 gem "spree_html_invoice", :git => "git://github.com/CodeCantor/spree-html-invoice.git"
 ```
 
-For install the assets neaded and create the default objects run the follow command:
+For installing the assets needed and creating the default objects run this command:
 
 ```shell
 rails generator spree_pos:install
@@ -37,7 +37,7 @@ rails generator spree_pos:install
 
 Continue reading the configuration section for see how to finish the setup.
 
-qonfigure
+Configure
 --------
 **IMPORTANT**: You have to config the shipping method with the zone of the ship address in the pos.
 
@@ -48,7 +48,7 @@ By default, the address chosen by the pos, will be the one setted to the current
 
 If you would like to use an other shipping method you can change it using, :pos_shipping_method.
 
-You can also change the invoice generator change the url, in wich the pos will redirect after press in print invoice:
+You can also change the invoice generator url, in wich the pos will redirect after pressing the print button:
 
   * Pos printing: Change the option :pos_printing to the url you would like to use after pressing print.
 
