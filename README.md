@@ -46,7 +46,7 @@ By default, the address chosen by the pos, will be the one setted to the current
   * Ship Address: You can config this options setting :pos_ship_address to the id of the Spree::Address you would like to use.
   * Bill Address: You can config this options setting :pos_bill_address to the id of the Spree::Address you would like to use. By default it will use :ship_address if not set
 
-If you would like to use an other shipping method you can change it using, :pos_shipping_method.
+If you would like to use an other shipping method you can change it using, :pos_shipping_method. By default, it will take 'At Store' with a flat rate.
 
 You can also change the invoice generator url, in wich the pos will redirect after pressing the print button:
 
