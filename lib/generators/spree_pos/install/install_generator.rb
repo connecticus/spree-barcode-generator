@@ -12,15 +12,11 @@ module SpreePos
         #inject_into_file "app/assets/stylesheets/admin/all.css", " *= require admin/spree_pos\n", :before => /\*\//, :verbose => true
       end
 
-      def add_shipping_method
-        sm = Spree::ShippingMethod.new({
-          name: 'At Store2',
-          display_on: 'back_end',
-          tracking_url: '',
-        })
-        sm.shipping_categories << Spree::ShippingCategory.find(2)
-        sm.calculator = Spree::Calculator::Shipping::FlatRate.new()
-        sm.save!
+      def add_seed
+        append_file "db/seeds.rb", <<-SEEDS
+          \n
+          SpreePos::Engine.load_seed if defined?(SpreePos)
+        SEEDS
       end
 
       def add_migrations
