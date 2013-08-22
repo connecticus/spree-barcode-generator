@@ -1,3 +1,6 @@
-<a href="/admin/barcode/print/<%=@variant.id%>" class="button">
-  <span> <%= t :variant_label %> </span> </a>
+<div class="field">
+  <%= button_link_to t(:variant_label),
+                     "/admin/barcode/print/#{@variant.id}",
+                     icon: 'icon-print' %>
+</div>
 
