@@ -55,9 +55,9 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
       @order.pos_sell = true
       @order.completed_at = Time.now
       @order.create_tax_charge!
-      @order.shipments.map { |s| s.ship! }
       @order.finalize!
       @order.save!
+      @order.shipments.map { |s| s.ship! }
     end
     url = SpreePos::Config[:pos_printing]
     url = url.sub("number" , @order.number.to_s)
