@@ -13,24 +13,17 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
   def print
     pdf = Prawn::Document.new( :page_size => [ 54.mm , 25.mm ] , :margin => 1.mm )
 
-    name = @variant.name
     option_value = " #{@variant.option_values.first.presentation}" if @variant.option_values.first
-
-    name_show = @variant.product.master.barcode
-    name_show = name if name_show.empty?
+    name_show = @variant.product.name
+    price = @variant.display_price.to_s
 
     pdf.float do
       pdf.text name_show, align: :left
       pdf.text @variant.barcode, align: :left
     end
-
-    if option_value
-      pdf.text option_value, align: :right
-    end
-
-
-    price = @variant.display_price.to_s
+    pdf.text option_value, align: :right if option_value
     pdf.text price, align: :right
+
     if barcode = get_barcode
       pdf.image( StringIO.new( barcode.to_png(:xdim => 5)) , :width => 50.mm , 
             :height => 10.mm , :at => [ 0 , 10.mm])
