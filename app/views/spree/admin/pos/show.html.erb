@@ -73,7 +73,7 @@
         <%= form_tag do %> 
         <%= hidden_field_tag(:price, item.id)   %>
         <input type="submit" style="display:none"/>
-        <%= text_field_tag "price#{item.id}" , item.price , 
+        <%= text_field_tag "price#{item.id}" , item.price ,
         :onclick => "this.form.price#{item.id}.select()" , 
         :onfocus => "this.form.m#{item.id}.select()"  , :size => 8  %>
         <% end %>
@@ -87,7 +87,7 @@
       <big>  
         <%= form_tag do %>
         <%= hidden_field_tag(:item, item.id) %>
-        <%= select_tag("discount" , options_for_select( ["",0,5,10,15,20,25,30,35,40,50,60,70] , item.price), :onchange => 'this.form.submit()')%> 
+        <%= select_tag("discount" , options_for_select( ["",0,5,10,15,20,25,30,35,40,50,60,70] , item.price), :onchange => 'this.form.submit()')%>
         <%end%>
       </big> 
     </td>
@@ -96,7 +96,7 @@
 
   <tr class="total">
     <td colspan="3"><b><%= t('order_total') %>:</b></td>
-    <td colspan="2" class="total"><span id="order_total"><%= number_to_currency @order.total %></span></td>
+    <td colspan="2" class="total"><span id="order_total"><%= @order.display_total.to_html %></span></td>
   </tr>
 </table>
 <br/>
