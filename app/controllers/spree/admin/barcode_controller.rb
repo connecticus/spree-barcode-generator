@@ -12,14 +12,25 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
   # moved to pdf as html has uncontrollable margins
   def print
     pdf = Prawn::Document.new( :page_size => [ 54.mm , 25.mm ] , :margin => 1.mm )
+
     name = @variant.name
-    name += " #{@variant.option_values.first.presentation}" if @variant.option_values.first
-    name_show = code
-    name_show = name if code.empty?
-    
-    pdf.text( name_show )
-    price = @variant.price
-    pdf.text "#{price} €", align: :right
+    option_value = " #{@variant.option_values.first.presentation}" if @variant.option_values.first
+
+    name_show = @variant.product.master.barcode
+    name_show = name if name_show.empty?
+
+    pdf.float do
+      pdf.text name_show, align: :left
+      pdf.text @variant.barcode, align: :left
+    end
+
+    if option_value
+      pdf.text option_value, align: :right
+    end
+
+
+    price = @variant.display_price.to_s
+    pdf.text price, align: :right
     if barcode = get_barcode
       pdf.image( StringIO.new( barcode.to_png(:xdim => 5)) , :width => 50.mm , 
             :height => 10.mm , :at => [ 0 , 10.mm])
@@ -29,15 +40,10 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
     
   
   private
-  # leave this in here maybe for later, not used anymore
-  def code
-    str = @variant.ean if @variant.respond_to?(:ean) 
-    return str unless str.to_s.empty?
-    @variant.sku
-  end
 
   #get the barby barcode object from the id, or nil if something goes wrong
   def get_barcode
+    code  = @variant.barcode
     return nil if code.to_s.empty?
     if code.length == 12
       return ::Barby::EAN13.new( code )
