@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_pos'
-  s.version     = '1.2'
+  s.version     = '1.2.1'
   s.summary     = 'Point of sale screen for Spree'
   s.required_ruby_version = '>= 1.8.7'
+  s.authors = ['Torsten R', 'Enrique Alvarez']
 
-  s.author            = 'Torsten R'
-  s.email             = 'torsten@villataika.fi'
+  s.email             = 'enrique@codecantor.com'
 
   s.files        = Dir['CHANGELOG', 'README.md', 'LICENSE', 'lib/**/*', 'app/**/*']
   s.require_path = 'lib'
