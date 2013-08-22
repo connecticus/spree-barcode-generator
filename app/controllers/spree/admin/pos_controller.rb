@@ -39,24 +39,26 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
   end
 
   def print
-    unless @order.payment_ids.empty?
-      @order.payments.first.delete unless @order.payments.first.amount == @order.total
+    if @order.state != "complete"
+      unless @order.payment_ids.empty?
+        @order.payments.first.delete unless @order.payments.first.amount == @order.total
+      end
+      if @order.payment_ids.empty?
+        payment = Spree::Payment.new
+        payment.payment_method = Spree::PaymentMethod.find_by_type_and_environment( "Spree::PaymentMethod::Check" , Rails.env)
+        payment.amount = @order.total
+        payment.order = @order
+        payment.save!
+        payment.capture!
+      end
+      @order.state = "complete"
+      @order.pos_sell = true
+      @order.completed_at = Time.now
+      @order.create_tax_charge!
+      @order.shipments.map { |s| s.ship! }
+      @order.finalize!
+      @order.save!
     end
-    if @order.payment_ids.empty?
-      payment = Spree::Payment.new
-      payment.payment_method = Spree::PaymentMethod.find_by_type_and_environment( "Spree::PaymentMethod::Check" , Rails.env)
-      payment.amount = @order.total 
-      payment.order = @order 
-      payment.save!
-      payment.capture!
-    end
-    @order.state = "complete"
-    @order.pos_sell = true
-    @order.completed_at = Time.now
-    @order.create_tax_charge!
-    @order.finalize!
-    @order.shipments.map { |s| s.ship! }
-    @order.save!
     url = SpreePos::Config[:pos_printing]
     url = url.sub("number" , @order.number.to_s)
     redirect_to url
