@@ -1,4 +1,3 @@
-
 SUMMARY
 -------
 
@@ -78,6 +77,7 @@ TO-DO
  * Refactor the view so it has the calculator prettier
  * Being able to use promotions from this interface
  * Create a report with the information of the day sells
+ * Recover funcionality for add stock directly from pos
 
 Copyright (c) 2011 [Torsten Ruger], released under the New BSD License
 Copyright (c) 2013 [Enrique Alvarez (enrique at codecantor dot com)], released under the New BSD License
