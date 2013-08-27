@@ -38,11 +38,7 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
   def get_barcode
     code  = @variant.barcode
     return nil if code.to_s.empty?
-    if code.length == 12
-      return ::Barby::EAN13.new( code )
-    else
-      return ::Barby::Code128B.new( code  )
-    end
+    ::Barby::Code128B.new( code  )
   end
   
   def load
