@@ -14,6 +14,7 @@ Features
  * Change calculator
  * Label printing
  * Flag orders as sold in pos
+ * Page for searching products
 
 How to use
 ----------
