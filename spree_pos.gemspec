@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_pos'
-  s.version     = '1.2.1'
+  s.version     = '1.2.2'
   s.summary     = 'Point of sale screen for Spree'
   s.required_ruby_version = '>= 1.8.7'
   s.authors = ['Torsten R', 'Enrique Alvarez']

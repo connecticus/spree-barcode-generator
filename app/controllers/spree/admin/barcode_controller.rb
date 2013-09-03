@@ -3,7 +3,6 @@ require 'barby'
 require 'prawn'
 require 'prawn/measurement_extensions'
 require 'barby/barcode/code_128'
-require 'barby/barcode/ean_13'
 require 'barby/outputter/png_outputter'
 class Spree::Admin::BarcodeController < Spree::Admin::BaseController
   before_filter :load 
@@ -38,11 +37,7 @@ class Spree::Admin::BarcodeController < Spree::Admin::BaseController
   def get_barcode
     code  = @variant.barcode
     return nil if code.to_s.empty?
-    if code.length == 12
-      return ::Barby::EAN13.new( code )
-    else
-      return ::Barby::Code128B.new( code  )
-    end
+    ::Barby::Code128B.new( code  )
   end
   
   def load

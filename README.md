@@ -1,22 +1,28 @@
-**DOING SOME REWORK FOR ADAPT THIS GEM TO SPREE 2.0-STABLE AND REFACTORING SOME CODE. NOT STABLE**
 SUMMARY
 -------
 
 A Point Of Sale (POS) screen for Spree.
 
-POS screen hooks into the Admin Tabs and is meant to be used to sell inside a shop, possibly with a touchscreen and a scanner.
+POS screen hooks into the Admin Tabs and is meant to be used to sell inside a shop, possibly with a touchscreen and a scanner. Allows for quick checkout and basic adjustment of line item prices also with discount percentages.
 
-Allows for quick checkout and basic adjustment of line item prices also with discount percentages.
+
+Features
+--------
+ * Input field for find items by sku/ean
+ * Print receipts of the order
+ * Do discounts directly from the interfaceç
+ * Change calculator
+ * Label printing
+ * Flag orders as sold in pos
+
+How to use
+----------
 
 A minimal transaction is one scan, and pressing of print button.
 
 Basic bar scanner input (sku/ean search) or search by name. No Customer, no shipping, no coupons, but these are achievable through the order interface.
 
-POS creates orders (just like the admin/order) and in fact lets you switch between the two views freely by adding links back and forth.
-
-Pressing new customer will create a new order (in checkout), which is finalised when print is pressed.
-
-ONLY pressing print will finalise the order, if you do not press print (ie press new customer) the order will be left
+POS creates orders (just like the admin/order) and in fact lets you switch between the two views freely by adding links back and forth. Pressing new customer will create a new order (in checkout), which is finalised when print is pressed. ONLY pressing print will finalise the order, if you do not press print (ie press new customer) the order will be left
  in "checkout" state and thus not be a sale in your system.
 
 Installation
@@ -61,6 +67,17 @@ Many sales and especially POS systems rely on barcode scanning. A barcode scanne
 input  to the product code. You may use the sku field for this but we use that for the suppliers code (or our own).
 
 So there is a migration supplied that provides a ean (European Article code, may be upc too) for the Variant class, and fields to edit it and search by it.
+
+
+TO-DO
+-----
+ * TESTS !!!!!!!!!!!!!!!!!!!!!!!!!
+ * Being able to assign a user directly to an order directly from the interface for later invoice printing.
+ * Do ease the mechanism for devolutions
+ * Refactor the view so it has the calculator prettier
+ * Being able to use promotions from this interface
+ * Create a report with the information of the day sells
+ * Recover funcionality for add stock directly from pos
 
 Copyright (c) 2011 [Torsten Ruger], released under the New BSD License
 Copyright (c) 2013 [Enrique Alvarez (enrique at codecantor dot com)], released under the New BSD License
