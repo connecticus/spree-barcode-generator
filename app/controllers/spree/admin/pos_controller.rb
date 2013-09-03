@@ -8,10 +8,19 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
   end
     
   def new
-    unless params[:force]
-      @order = Spree::Order.last # TODO , this could be per user
+
+    begin
+      unless params[:force] && spree_user_session[:pos_order]
+        @order = Spree::Order.find spree_user_session[:pos_order]
+      end
+
+      unless @order.try(:cart?)
+        init 
+      end
+    rescue ActiveRecord::RecordNotFound
+      init
     end
-    init if @order == nil or not @order.complete?
+
     redirect_to :action => :show , :number => @order.number
   end
 
@@ -169,7 +178,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     #method = Spree::ShippingMethod.find_by_name SpreePos::Config[:pos_shipping]
     #@order.shipping_method = method || Spree::ShippingMethod.first
     #@order.create_proposed_shipments
-    session[:pos_order] = @order.number
+    spree_user_session[:pos_order] = @order.number
   end
 
   def add_variant var , quant = 1
