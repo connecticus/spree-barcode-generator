@@ -1,20 +1,20 @@
-Spree::Core::Engine.routes.prepend do
+Spree::Core::Engine.routes.append do
   namespace :admin do
-    match "barcode/print/:id" => "barcode#print"
-    match "barcode/code/:id" => "barcode#code"
-
-    match "pos/new" => "pos#new"
-    match "pos/show/:number" => "pos#show"
-    match "pos/find/:number" => "pos#find"
-    match "pos/add/:number/:item" => "pos#add"
-    match "pos/remove/:number/:item" => "pos#remove"
-    match "pos/print/:number" => "pos#print"
-#    match "pos/export" => "pos#export" 
-#    match "pos/import" => "pos#import" 
-#    match "pos/index" => "pos#index"
-    match "pos/inventory/:number" => "pos#inventory"
-    get "pos" , :to => "pos#new"
+    scope :barcode do
+      get "/print/:id" => "barcode#print"
+      get "/code/:id" => "barcode#code"
+    end
+    
+    scope :pos do
+      get "/new" => "pos#new"
+      get "/show/:number" => "pos#show"
+      get "/find/:number" => "pos#find"
+      get "/add/:number/:item" => "pos#add"
+      get "/remove/:number/:item" => "pos#remove"
+      get "/print/:number" => "pos#print"
+      get "/inventory/:number" => "pos#inventory"
+      get "/" , :to => "pos#new"
+    end
   end
-#  match '/admin' => 'admin/pos#index', :as => :admin
 end
 
