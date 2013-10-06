@@ -10,7 +10,7 @@ Features
 --------
  * Input field for find items by sku/ean
  * Print receipts of the order
- * Do discounts directly from the interfaceç
+ * Do discounts directly from the interface
  * Change calculator
  * Label printing
  * Flag orders as sold in pos
@@ -39,7 +39,7 @@ gem "spree_html_invoice", :git => "git://github.com/CodeCantor/spree-html-invoic
 For installing the assets needed and creating the default objects run this command:
 
 ```shell
-rails generator spree_pos:install
+rails generate spree_pos:install
 ```
 
 Continue reading the configuration section for see how to finish the setup.
