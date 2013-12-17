@@ -49,6 +49,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
 
   def print
     if @order.state != "complete"
+      self.set_shipping_method
       unless @order.payment_ids.empty?
         @order.payments.first.delete unless @order.payments.first.amount == @order.total
       end
@@ -201,8 +202,8 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     name_shipping = SpreePos::Config[:pos_shipping_method] || 'At Store'
     method = Spree::ShippingMethod.find_by_name name_shipping
     @order.shipments.map do |s| 
-      sm = s.shipping_rates.find_by_shipping_method_id(method.id) 
-      s.selected_shipping_rate_id = sm.id
+      sr = s.add_shipping_method(method, false)
+      s.selected_shipping_rate_id = sr.id
     end
   end
 
