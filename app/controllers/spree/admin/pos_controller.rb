@@ -206,7 +206,7 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     # Calculate the shipments
     # TODO: Check stock location for be in the shop
 
-    #@order.create_proposed_shipments
+    @order.create_proposed_shipments
 
     # Set shipping method as one named 'At Store'
     name_shipping = SpreePos::Config[:pos_shipping_method] || 'At Store'
