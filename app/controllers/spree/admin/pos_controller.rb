@@ -27,6 +27,8 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
   def add
     if pid = params[:item]
       add_variant Spree::Variant.find pid
+
+
       flash.notice = t('product_added')
     end
     redirect_to :action => :show 
@@ -36,6 +38,10 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     if pid = params[:item]
       variant = Spree::Variant.find(pid)
       line_item = @order.line_items.find { |line_item| line_item.variant_id == variant.id }
+
+      fire_event('spree.cart.add')
+      fire_event('spree.order.contents_changed')
+
       line_item.quantity -= 1
       if line_item.quantity == 0
         @order.line_items.delete line_item
@@ -189,6 +195,9 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     populator = Spree::OrderPopulator.new(@order, Spree::Config[:currency])
     populator.populate(variants: { var => quant})
 
+    fire_event('spree.cart.add')
+    fire_event('spree.order.contents_changed')
+
     self.set_shipping_method
     @order.save!
   end
@@ -196,7 +205,8 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
   def set_shipping_method
     # Calculate the shipments
     # TODO: Check stock location for be in the shop
-    @order.create_proposed_shipments
+
+    #@order.create_proposed_shipments
 
     # Set shipping method as one named 'At Store'
     name_shipping = SpreePos::Config[:pos_shipping_method] || 'At Store'
@@ -214,6 +224,10 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     params[:q][:product_deleted_at_null] = "1"
     @search = Spree::Variant.ransack(params[:q])
     @variants = @search.result(:distinct => true).page(params[:page]).per(20)
+  end
+
+  def current_order
+    @order
   end
 
 end
