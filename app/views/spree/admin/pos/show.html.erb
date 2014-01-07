@@ -23,7 +23,19 @@
           </p>
         </div>
       <% end %>
-  </div>        
+
+      <%= form_tag "/admin/pos/apply_coupon/#{@order.number}" , :id => "coupon_apply" do  %>
+          <input type="hidden" value="1" name="index">
+          <div class="box">
+              <p>
+                  <%= label_tag :coupon_code, t("coupon_code") %><br />
+                  <%= text_field_tag :coupon_code, "" , :size => 15 %>
+                  <%= button t("apply") %>
+              </p>
+          </div>
+      <% end %>
+
+  </div>
   <script type="text/javascript" language="JavaScript">
     document.getElementById('sku').focus();
   </script>

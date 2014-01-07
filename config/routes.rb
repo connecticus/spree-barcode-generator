@@ -8,6 +8,7 @@ Spree::Core::Engine.routes.append do
     scope :pos do
       get "/new" => "pos#new"
       get "/show/:number" => "pos#show"
+      post "/apply_coupon/:number" => "pos#apply_coupon"
       post "/show/:number" => "pos#show"
       get "/find/:number" => "pos#find"
       get "/add/:number/:item" => "pos#add"

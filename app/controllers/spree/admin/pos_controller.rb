@@ -53,6 +53,18 @@ class Spree::Admin::PosController < Spree::Admin::BaseController
     redirect_to :action => :show 
   end
 
+  def apply_coupon
+    @order.coupon_code = params[:coupon_code]
+    coupon_result = Spree::Promo::CouponApplicator.new(@order).apply
+    if coupon_result[:coupon_applied?]
+      add_notice coupon_result[:success] if coupon_result[:success].present?
+      redirect_to :action => :show
+    else
+      add_error coupon_result[:error]
+      redirect_to  :action => 'show'
+    end
+  end
+
   def print
     if @order.state != "complete"
       self.set_shipping_method
