@@ -15,9 +15,16 @@ Spree::Core::Engine.routes.append do
       get "/remove/:number/:item" => "pos#remove"
       get "/print/:number" => "pos#print"
       get "/inventory/:number" => "pos#inventory"
+
+      scope :refund do
+        get 'select_order' => 'refund#select_order'
+        post 'select_items' => 'refund#select_items'
+        post 'create_refund' => 'refund#create_refund'
+      end
     end
+
     get "/pos" , :to => "pos#new"
-    get "/stock_products", to: "show_stock#index", as: 'pos_show_stock'
+    get "/stock_products", to: "show_stock#index"
   end
 end
 
