@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>REFUND PAYMENT</title>
+    </head>
+    <body>
+        <div class="errors">
+            <%= flash[:error] if flash[:error].present? %>
+            <%= flash[:notice] if flash[:notice].present? %>
+        </div>
+        <div class="refund">
+            <%= yield %>
+        </div>
+    </body>
+</html>
