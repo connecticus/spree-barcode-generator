@@ -1,4 +1,4 @@
-<div>
+<div class="info">
     <h1>Refund complete</h1>
     <p>Refund number <b><%= @return_authorization.number %></b></p>
     <p>You have successfully returned the following items:</p>
@@ -7,4 +7,8 @@
         <li><%= iu.variant.product.name %> <%= iu.variant.sku.to_s %></li>
     <% end %>
     </ul>
+    <% if @coupon %>
+        <p>Create coupon <%= @coupon.code %> with the amount of <%= @coupon_amount %></p>
+        <p>For printing the coupin press the link: <%= link_to 'Cupon', admin_print_coupon_path(@coupon.code) %>  </p>
+    <% end %>
 </div>
