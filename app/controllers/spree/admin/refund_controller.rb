@@ -7,9 +7,9 @@ class Spree::Admin::RefundController < Spree::Admin::BaseController
 
   def select_items
     @order = Spree::Order.find_by(number: params[:order_number])
-    @order.return_authorizations.select(&:can_cancel?).map(&:cancel)
-    @return_authorization = Spree::ReturnAuthorization.create(order: @order, reason: 'POS refund')
     if @order
+      @order.return_authorizations.select(&:can_cancel?).map(&:cancel) if @order.return_authorizations.count > 0
+      @return_authorization = Spree::ReturnAuthorization.create(order: @order, reason: 'POS refund')
       if @order.state == 'complete'
         @variants = @order.variants
       else
