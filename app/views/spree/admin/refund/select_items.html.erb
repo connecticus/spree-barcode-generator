@@ -1,5 +1,6 @@
 <%= form_tag 'create_refund' do |f| %>
     <%= hidden_field_tag :rma, @return_authorization.number %>
+    <%= hidden_field_tag :order_number, @order.number %>
     <table>
         <thead>
         <tr data-hook="rma_header">
@@ -32,8 +33,22 @@
             <% end %>
          </tbody>
     </table>
+    <div>
+        <p>ORDER TOTAL AMOUNT: <%= @order.display_total.to_html %></p>
+        <% if @order.adjustments.eligible.count > 0 %>
+            <p>Adjustments</p>
+            <ul>
+                <% @order.adjustments.eligible.each do |adjustment| %>
+                    <li>
+                        <%= adjustment.label %>:
+                        <%= adjustment.display_amount.to_html %>
+                    </li>
+                <% end %>
+            </ul>
+        <% end %>
+    </div>
     <%= label_tag :coupon_amount, Spree.t(:coupon_amount) %> <span class="required">*</span><br />
-    <%= text_field_tag :amount %> <%= Spree.t(:rma_value) %>: <span id="rma_value">0.00</span>
+    <%= text_field_tag :coupon_amount %> <%= Spree.t(:rma_value) %>: <span id="rma_value">0.00</span>
 
     <%= submit_tag 'Create refund' %>
 <% end %>
