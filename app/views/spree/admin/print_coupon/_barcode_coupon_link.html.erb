@@ -1,0 +1,16 @@
+<%= f.field_container :code do %>
+    <%= f.label :code %>
+    <%= f.text_field :code, :class => 'fullwidth' %>
+    <%= button_link_to t(:coupon_label),
+                       "javascript:poptastic('/admin/print_coupon/#{@promotion.code}');",
+                       icon: 'icon-print' %>
+<% end %>
+<SCRIPT TYPE="text/javascript">
+    <!--
+    var newwindow;
+    function poptastic(url)
+    { newwindow=window.open(url,'Print','width=400,left=300,top=50,resizable=no,scrollbars=yes,toolbar=yes,status=no');
+        if (window.focus) {newwindow.focus()}
+    }
+    //-->
+</SCRIPT>

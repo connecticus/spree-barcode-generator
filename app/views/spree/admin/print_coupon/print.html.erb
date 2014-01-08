@@ -1,0 +1,4 @@
+<p>Cupon descuento de <b class="total"><%= Spree::Money.new(@coupon_amount).to_html %></b></p>
+<p><%= image_tag "/#{@coupon.code}.png" %></p>
+<p><%= @coupon.code %></p>
+<p>Este cupón es valido para las compras que hagas desde la página web <b>http://nigramercato.com</b> al igual que las compras que hagas desde nuestra tienda</p>
