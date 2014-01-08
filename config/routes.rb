@@ -5,7 +5,7 @@ Spree::Core::Engine.routes.append do
       get "/code/:id" => "barcode#code"
     end
 
-    get 'print_coupon/:coupon_code' => 'print_coupon#print', as: 'print_coupon'
+    get 'print_coupon/:coupon_code' => 'print_coupon#print'
     
     scope :pos do
       get "/new" => "pos#new"

@@ -9,6 +9,6 @@
     </ul>
     <% if @coupon %>
         <p>Create coupon <%= @coupon.code %> with the amount of <%= @coupon_amount %></p>
-        <p>For printing the coupin press the link: <%= link_to 'Cupon', admin_print_coupon_path(@coupon.code) %>  </p>
+        <p>For printing the coupin press the link: <%= link_to 'Cupon',  "/admin/print_coupon/#{@promotion.code}"%>  </p>
     <% end %>
 </div>
