@@ -1,0 +1,19 @@
+<div id="show_stock">
+    <ul>
+        <%- @products.each do |product| %>
+            <li>
+                <strong><%= product.name %></strong>:
+                <%- product.variants.each_with_index do |variant,index| %>
+                    |
+                    <%= variant.sku.to_s %>
+                    (
+                    <%- variant.option_values.each do |option_value| %>
+                        <%= option_value.presentation %>
+                    <%- end %>
+                    ) =>
+                    <%= variant.in_stock? ? variant.total_on_hand : 'Out of stock' %>
+                <%- end %>
+            </li>
+        <%- end %>
+    </ul>
+</div>
