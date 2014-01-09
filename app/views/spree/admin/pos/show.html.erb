@@ -57,7 +57,8 @@
     <%= image_tag "admin/pos/customer.png" , :alt => "New Customer" %> 
   </a>  <br/>
   <%= image_tag "admin/pos/barcode.jpg" , :alt => "Trenner" , :width => 280 , :height => 15 %>  <br/>
-  <%= link_to "Create refund", 'javascript:poptastic("/admin/pos/refund/select_order");' %>
+  <%= link_to "Create refund", 'javascript:poptastic("/admin/pos/refund/select_order");' %> <br/>
+  <%= link_to "Create coupon", 'javascript:poptastic("/admin/pos/refund/select_coupon");' %> <br/>
 <%end%>
 <%= render partial: 'keyboard' %>
 <%= render 'spree/shared/error_messages', :target => @pos %>

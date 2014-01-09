@@ -22,6 +22,8 @@ Spree::Core::Engine.routes.append do
         get 'select_order' => 'refund#select_order'
         post 'select_items' => 'refund#select_items'
         post 'create_refund' => 'refund#create_refund'
+        get 'select_coupon' => 'refund#select_coupon'
+        post 'create_coupon' => 'refund#create_coupon'
       end
     end
 

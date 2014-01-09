@@ -1,0 +1,9 @@
+<div class="select_order">
+    <%= form_tag 'create_coupon' do |f| %>
+        <%= label_tag :coupon_amount %><br/>
+        <%= text_field_tag :coupon_amount %><br/>
+        <%= label_tag :coupon_description %><br/>
+        <%= text_area_tag :coupon_description %><br/>
+        <%= submit_tag 'Create coupon' %>
+    <% end %>
+</div>
