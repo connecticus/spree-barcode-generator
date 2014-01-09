@@ -2,8 +2,10 @@
     <ul>
         <%- @products.each do |product| %>
             <li>
-                <strong><%= product.name %></strong>:
-                <%- product.variants.each_with_index do |variant,index| %>
+                <%= link_to product_path(product), target: '_blank' do %>
+                    <%= small_image(product) %>
+                <% end %>
+                <%- product.variants.select(&:in_stock?).each_with_index do |variant,index| %>
                     |
                     <%= variant.sku.to_s %>
                     (
