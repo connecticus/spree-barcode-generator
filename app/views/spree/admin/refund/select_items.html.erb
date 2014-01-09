@@ -47,6 +47,8 @@
             </ul>
         <% end %>
     </div>
+    <%= label_tag :coupon_description , Spree.t(:coupon_description) %></br>
+    <%= text_area_tag :coupon_description %></br>
     <%= label_tag :coupon_amount, Spree.t(:coupon_amount) %> <span class="required">*</span><br />
     <%= text_field_tag :coupon_amount %> <%= Spree.t(:rma_value) %>: <span id="rma_value">0.00</span>
 

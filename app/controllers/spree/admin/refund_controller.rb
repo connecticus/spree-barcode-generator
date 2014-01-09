@@ -26,9 +26,10 @@ class Spree::Admin::RefundController < Spree::Admin::BaseController
     @order = Spree::Order.find_by(number: params[:order_number])
     @return_authorization = Spree::ReturnAuthorization.find_by(number: params[:rma])
     @coupon_amount = params[:coupon_amount].try(&:to_f)
+    @coupon_description = params[:coupon_description]
 
     if @coupon_amount && @coupon_amount > 0
-      create_discount_coupon  @coupon_amount
+      create_discount_coupon  @coupon_amount, @coupon_description
       @return_authorization.reason = "POS refund. Create coupon #{@coupon.code} with the amount #{params[:coupon_amount]}"
     end
 
@@ -37,8 +38,9 @@ class Spree::Admin::RefundController < Spree::Admin::BaseController
   end
 
   protected
-  def create_discount_coupon(amount)
+  def create_discount_coupon(amount, description = nil)
     @coupon = Spree::Promotion.create(name: "REFUND #{@order.number}",event_name: 'spree.checkout.coupon_code_added', usage_limit: 2)
+    @coupon.description = description unless description.try(&:empty?)
     @coupon.code = "#{@return_authorization.number}NI"
     action = @coupon.actions.build(type: 'Spree::Promotion::Actions::CreateAdjustment')
     calculator = Spree::Calculator::FlatRate.create
