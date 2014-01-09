@@ -1,0 +1,8 @@
+<div id="promotions-orders">
+    <p>Used in the following orders</p>
+    <ul>
+        <% @promotion.credits.map(&:adjustable).each do |order| %>
+            <li><%= link_to order.number, admin_order_adjustments_path(order), { target: '_blank'} %></li>
+        <% end %>
+    </ul>
+</div>
