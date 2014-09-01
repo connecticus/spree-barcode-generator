@@ -39,7 +39,7 @@ gem "spree_html_invoice", :git => "git://github.com/CodeCantor/spree-html-invoic
 For installing the assets needed and creating the default objects run this command:
 
 ```shell
-rails generate spree_pos:install
+rails generate spree_barcode:install
 ```
 
 Continue reading the configuration section for see how to finish the setup.

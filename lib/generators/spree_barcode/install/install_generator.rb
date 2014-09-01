@@ -3,13 +3,13 @@ module SpreePos
     class InstallGenerator < Rails::Generators::Base
 
       def add_javascripts
-        #append_file "app/assets/javascripts/store/all.js", "//= require store/spree_pos\n"
-        #append_file "app/assets/javascripts/admin/all.js", "//= require admin/spree_pos\n"
+        #append_file "app/assets/javascripts/store/all.js", "//= require store/spree_barcode\n"
+        #append_file "app/assets/javascripts/admin/all.js", "//= require admin/spree_barcode\n"
       end
 
       def add_stylesheets
-        #inject_into_file "app/assets/stylesheets/store/all.css", " *= require store/spree_pos\n", :before => /\*\//, :verbose => true
-        #inject_into_file "app/assets/stylesheets/admin/all.css", " *= require admin/spree_pos\n", :before => /\*\//, :verbose => true
+        #inject_into_file "app/assets/stylesheets/store/all.css", " *= require store/spree_barcode\n", :before => /\*\//, :verbose => true
+        #inject_into_file "app/assets/stylesheets/admin/all.css", " *= require admin/spree_barcode\n", :before => /\*\//, :verbose => true
       end
 
       def add_seed
@@ -20,7 +20,7 @@ module SpreePos
       end
 
       def add_migrations
-        run 'bundle exec rake railties:install:migrations FROM=spree_pos'
+        run 'bundle exec rake railties:install:migrations FROM=spree_barcode'
       end
 
       def run_migrations

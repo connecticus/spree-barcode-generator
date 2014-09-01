@@ -1,13 +1,9 @@
-module SpreePos
+module SpreeBarcode
 
   class Engine < Rails::Engine
-    engine_name 'spree_pos'
+    engine_name 'spree_barcode'
 
     config.autoload_paths += %W(#{config.root}/lib)
-
-    initializer "spree.spree_pos.preferences", :after => "spree.environment" do |app|
-      SpreePos::Config = SpreePos::Configuration.new
-    end
 
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
